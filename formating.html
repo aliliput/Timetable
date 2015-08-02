@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script>
+  $(function(){
+    $.get('table.html', function(data){
+      data = data.replace(/[^\x01-\x7E]/g, "");
+      data = data.replace(/<div>/g, "");
+      data = data.replace(/<div class="item">/g, "");
+      $('#data').html(data);
+      $("caption").remove();
+      $("colgroup").remove();
+      $(".sub").remove();
+      $("font:empty").remove();
+      $("th:empty").remove();
+      $("tr:empty").remove();
+      var data = $(".timetable").html();
+      var len = data.length;
+      var weekday = [];
+      var saturday = [];
+      var sunday = [];
+
+      var hour = $("tr th:first-child").text();
+      var minute = $("tr th:first-child").next().text();
+      weekday[hour] = minute;
+      console.log(weekday);
+    });
+  });
+  </script>
+</head>
+<body>
+  <div id="data"></div>
+</body>
+</html>
