@@ -39,7 +39,7 @@
           var minute = data.eq(i).children('td:eq(' + num + ')').text();
           minute = minute.replace(/\n/g, "");
           minute = minute.replace(/\s*/y, "");
-          minute = minute.replace(/\s+/g, ",");
+          minute = minute.replace(/\s+/g, ", ");
           day[time] = minute;
         }
         day = JSON.stringify(day);
@@ -47,13 +47,21 @@
       MakeTable(weekday);
       MakeTable(saturday);
       MakeTable(sunday);
-      console.log(weekday);
+
+      function showJson(day){
+        for(var i in day){
+          $('#jsonData').append('"' + i + '"' + ':[' + day[i] + ']<br />');
+        }
+      }
+      showJson(weekday);
+      showJson(saturday);
+
     });
   });
   </script>
 </head>
 <body>
   <div id="data"></div>
-  <div id="weekday"></div>
+  <div id="jsonData"></div>
 </body>
 </html>
