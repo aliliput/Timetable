@@ -20,7 +20,6 @@
       $("th:empty").remove();
       $("tr:empty").remove();
       data = $('.timetable tr');
-      console.log(data);
       var weekday = {};
       var saturday = {};
       var sunday = {};
@@ -38,8 +37,9 @@
           var time = data.eq(i).children('th:eq(' + num + ')').text();
           var minute = data.eq(i).children('td:eq(' + num + ')').text();
           minute = minute.replace(/\n/g, "");
-          minute = minute.replace(/\s*/y, "");
+          minute = minute.replace(/\s*/, "");
           minute = minute.replace(/\s+/g, ",");
+          minute = minute.split(",");
           day[time] = minute;
         }
         day = JSON.stringify(day);
@@ -48,6 +48,19 @@
       MakeTable(saturday);
       MakeTable(sunday);
       console.log(weekday);
+
+      function showTable(day){
+        for(var key in day){
+          $('#weekday').append('"' + key + '"' + ':[');
+          for(var i=0; i<day[key].length; i++){
+            $('#weekday').append('"' + day[key][i] + '",' );
+          }
+          $('#weekday').append('],<br />' );
+        }
+      }
+      showTable(weekday);
+      showTable(saturday);
+      showTable(sunday);
     });
   });
   </script>

@@ -142,5 +142,13 @@
         "20":[45],
         "21":[23]
     }
+},
+{
+    "start" : "Dekijima-ekimae",
+    "destination" : "Osaka-station",
+    "No" : "42",
+    "date" : "weekday",
+    "table" : {
+    }
 }
 ]
