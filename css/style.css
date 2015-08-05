@@ -1,0 +1,16 @@
+h2{
+  font-size: 1em;
+  line-height: 2em;
+  color: #fff;
+  padding: 0 0 0 1em;
+}
+h2.go{
+  background-color: #a22041;
+}
+h2.back{
+  background-color: #274a78;
+}
+.right{
+  width: 100%;
+  text-align: right;
+}
