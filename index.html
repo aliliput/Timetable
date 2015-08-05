@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
  <script>
       var d = new Date();
       var day = d.getDay();
@@ -27,19 +28,19 @@
       });
 
       $(function() {
-        $.getJSON("tables.json" , function(data) {
+        $.getJSON("./tables.json" , function(data) {
           var len = data.length;
 
           function timeTable(start, destination){
             for(var i = 0; i < len; i++) {
-              if(data[i].date == day && data[i].destination == destination){
+              if(data[i].date == day && data[i].start == start && data[i].destination == destination){
                 $('#' + start).append("<li>" + "(" + data[i].No + "号系統)" + hour + "時..." + data[i]["table"][hour] + "</li>");
               }
             }
             if(nextHour){
               $('#' + start).after('<ul id="' + start + '-next"></ul>');
               for(var i = 0; i < len; i++) {
-                if(data[i].date == day && data[i].destination == destination){
+                if(data[i].date == day && data[i].start == start && data[i].destination == destination){
                   $('#' + start + "-next").append("<li>" + "(" + data[i].No + "号系統)" + nextHour + "時..." + data[i]["table"][nextHour] + "</li>");
                 }
               }
@@ -47,6 +48,7 @@
           }
 
           timeTable('Dekijima-ohashi', 'Osaka-station');
+          timeTable('Dekijima-ekimae', 'Osaka-station');
         });
       });
   </script>
@@ -55,7 +57,9 @@
   <div id="date"></div>
   <h2>出来島大橋から大阪駅</h2>
   <ul id="Dekijima-ohashi"></ul>
+  <h2>出来島駅から大阪駅</h2>
+  <ul id="Dekijima-ekimae"></ul>
   <h2>御幣島駅から大阪駅</h2>
-  <ul id="bus-mitejima"></ul>
+  <ul id="Mitejima"></ul>
 </body>
 </html>
