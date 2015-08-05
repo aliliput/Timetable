@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script>
+  $(function(){
+    $('#data').load('./table.html', function(data){
+      data = data.replace(/[^\x01-\x7E]/g, "");
+      data = data.replace(/<div>/g, "");
+      data = data.replace(/<div class="item">/g, "");
+      data = data.replace(/\n/g, "");
+      data = data.replace(/\t/g, "");
+      $('#data').html(data);
+      $("caption").remove();
+      $("colgroup").remove();
+      $(".sub").remove();
+      $("font:empty").remove();
+      $("th:empty").remove();
+      $("tr:empty").remove();
+      data = $('.timetable tr');
+      var weekday = {};
+      var saturday = {};
+      var sunday = {};
+
+      function MakeTable(day){
+        var num
+        if(day == weekday){
+          num = 0;
+        }else if (day == saturday) {
+          num = 1;
+        }else {
+          num = 2;
+        }
+        for(var i=0, l=data.length; i<l; i++){
+          var time = data.eq(i).children('th:eq(' + num + ')').text();
+          var minute = data.eq(i).children('td:eq(' + num + ')').text();
+          minute = minute.replace(/\n/g, "");
+          minute = minute.replace(/\s*/, "");
+          minute = minute.replace(/\s+/g, ",");
+          minute = minute.split(",");
+          day[time] = minute;
+        }
+        day = JSON.stringify(day);
+      }
+      MakeTable(weekday);
+      MakeTable(saturday);
+      MakeTable(sunday);
+      console.log(weekday);
+
+      function showTable(day){
+        for(var key in day){
+          $('#weekday').append('"' + key + '"' + ':[');
+          for(var i=0; i<day[key].length; i++){
+            if(i<day[key].length-1){
+              $('#weekday').append('"' + day[key][i] + '",' );
+            }else{
+              $('#weekday').append('"' + day[key][i] + '"' );
+            }
+          }
+          $('#weekday').append('],<br />' );
+        }
+        $('#weekday').append('<br />' );
+      }
+      showTable(weekday);
+      showTable(saturday);
+      showTable(sunday);
+    });
+  });
+  </script>
+</head>
+<body>
+  <div id="data"></div>
+  <div id="weekday"></div>
+</body>
+</html>
