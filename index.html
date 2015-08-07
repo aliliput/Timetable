@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="components/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+ <script>
+      $(document).bind("touchmove", function(){
+        location.reload();
+      });
+
+      var d = new Date();
+      var day = d.getDay();
+      if (day == 0){
+        day = "sunday";
+      }else if (day == 6) {
+        day = "saturday";
+      }else {
+        day = "weekday";
+      }
+
+      var hour = d.getHours();
+      var minute = d.getMinutes();
+  　   if(minute > 30){
+        var nextHour = hour + 1;
+      }
+
+      $(function(){
+        $("#date").text("現在時刻: " + hour + "時" + minute + "分");
+      });
+
+      $(function() {
+        $.getJSON("components/tables.json" , function(data) {
+          var len = data.length;
+
+          function timeTable(start, destination){
+            for(var i = 0; i < len; i++) {
+              var textMinutes = new String();
+              if(data[i].date == day && data[i].start == start && data[i].destination == destination){
+                var textHour = "<li>" + "(" + data[i].No + "号系統)" + hour + "時...";
+                if(data[i]["table"][hour] !== undefined){
+                    var l = data[i]["table"][hour].length;
+                }else{
+                    var l = 0;
+                }
+
+                for(var m=0; m < l; m++){
+                  if(data[i]["table"][hour][m] >= minute){
+                  textMinutes += data[i]["table"][hour][m] + ", ";
+                  }
+                }
+                var textFull = textHour + textMinutes + "</li>";
+                if(textMinutes.length == 0){
+                    textFull = "";
+                }
+                $('#' + start).append(textFull);
+              }
+            }
+            if(nextHour){
+              $('#' + start).after('<ul id="' + start + '-next"></ul>');
+              for(var i = 0; i < len; i++) {
+                if(data[i].date == day && data[i].start == start && data[i].destination == destination){
+                  $('#' + start + "-next").append("<li>" + "(" + data[i].No + "号系統)" + nextHour + "時..." + data[i]["table"][nextHour] + "</li>");
+                }
+              }
+            }
+          }
+
+          timeTable('Dekijima-ohashi', 'Osaka-station');
+          timeTable('Dekijima-ekimae', 'Osaka-station');
+          timeTable('Mitejima', 'Dekijima');
+          timeTable('Juso', 'Dekijima');
+          timeTable('Umeda', 'Dekijima');
+        });
+      });
+  </script>
+</head>
+<body>
+  <div class="right"><a href="#back">帰り</a></div>
+  <div id="date"></div>
+  <h2 class="go">出来島大橋から大阪駅</h2>
+  <ul id="Dekijima-ohashi"></ul>
+  <h2 class="go">出来島駅から大阪駅</h2>
+  <ul id="Dekijima-ekimae"></ul>
+  <h2 id="back" class="back">御幣島駅から出来島大橋</h2>
+  <ul id="Mitejima"></ul>
+  <h2 class="back">十三から出来島大橋</h2>
+  <ul id="Juso"></ul>
+  <h2 class="back">梅田から出来島大橋</h2>
+  <ul id="Umeda"></ul>
+</body>
+</html>
